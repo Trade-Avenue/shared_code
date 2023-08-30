@@ -1,0 +1,52 @@
+<div id={@id} {@rest}>
+  <.form for={@form}>
+    <.dropdown
+      id={"#{@id}-dropdown"}
+      js_lib="live_view_js"
+      placement="left"
+      class="flex-none"
+      menu_items_wrapper_class="w-max"
+    >
+      <:trigger_element>
+        <%= render_slot(@trigger_element,
+          parent_id: @id,
+          field: @form[:value],
+          options: @options,
+          empty?: empty_options?(@options)
+        ) %>
+      </:trigger_element>
+
+      <div class="p-4">
+        <input
+          :if={@searchable? and not empty_options?(@options)}
+          id={"#{@id}-filter"}
+          phx-hook="SelectSearchHook"
+          data-search-element-query={@search_element_query}
+          placeholder={@search_placeholder}
+          type="text"
+          class="pc-text-input mb-4"
+        />
+
+        <div class="max-h-96 overflow-y-auto">
+          <ul class="w-full grid gap-0.5">
+            <%= if empty_options?(@options) do %>
+              <div :if={empty_options?(@options)} class="text-sm">
+                <%= render_slot(@empty_list_element) || "Nothing to see here" %>
+              </div>
+            <% else %>
+              <%= for {name, value} <- @options do %>
+                <%= render_slot(@option_element,
+                  parent_id: @id,
+                  name: name,
+                  value: value,
+                  field: @form[:value],
+                  target: @myself
+                ) %>
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </.dropdown>
+  </.form>
+</div>

@@ -1,0 +1,34 @@
+<div>
+  <div class="flex gap-2">
+    <%= render_slot(@title) %>
+
+    <.spinner
+      id={"#{@id}-loading"}
+      show={true}
+      size="sm"
+      class="opacity-0 transition-opacity duration-1000"
+    />
+  </div>
+
+  <.form for={@form}>
+    <label class="pc-checkbox-label">
+      <input
+        type="checkbox"
+        name="all"
+        value="all"
+        class="pc-checkbox"
+        checked={@all_selected?}
+        phx-change={JS.push("toggle_select_all", target: @myself, loading: "##{@id}-loading")}
+      />
+      <div>All</div>
+    </label>
+
+    <CheckboxGroup.render
+      field={@form[@filter_info.id]}
+      group_layout="col"
+      phx-change={JS.push("update_checkbox", target: @myself, loading: "##{@id}-loading")}
+      options={@options}
+      class="gap-2"
+    />
+  </.form>
+</div>

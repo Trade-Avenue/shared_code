@@ -1,0 +1,53 @@
+
+@import "tippy.js/dist/tippy.css";
+
+@import "tippy.js/themes/translucent.css";
+@import "tippy.js/animations/scale.css";
+
+.tippy-box[data-theme~='info'] {
+    @apply bg-blue-600 text-white;
+}
+.tippy-box[data-theme~='info'][data-placement^='top'] > .tippy-arrow::before {
+    @apply border-t-blue-600;
+}
+.tippy-box[data-theme~='info'][data-placement^='bottom'] > .tippy-arrow::before {
+    @apply border-b-blue-600;
+}
+.tippy-box[data-theme~='info'][data-placement^='left'] > .tippy-arrow::before {
+    @apply border-l-blue-600;
+}
+.tippy-box[data-theme~='info'][data-placement^='right'] > .tippy-arrow::before {
+    @apply border-r-blue-600;
+}
+
+.tippy-box[data-theme~='danger'] {
+    @apply bg-red-600 text-white;
+}
+.tippy-box[data-theme~='danger'][data-placement^='top'] > .tippy-arrow::before {
+    @apply border-t-red-600;
+}
+.tippy-box[data-theme~='danger'][data-placement^='bottom'] > .tippy-arrow::before {
+    @apply border-b-red-600;
+}
+.tippy-box[data-theme~='danger'][data-placement^='left'] > .tippy-arrow::before {
+    @apply border-l-red-600;
+}
+.tippy-box[data-theme~='danger'][data-placement^='right'] > .tippy-arrow::before {
+    @apply border-r-red-600;
+}
+
+.tippy-box[data-theme~='success'] {
+    @apply bg-green-600 text-white;
+}
+.tippy-box[data-theme~='success'][data-placement^='top'] > .tippy-arrow::before {
+    @apply border-t-green-600;
+}
+.tippy-box[data-theme~='success'][data-placement^='bottom'] > .tippy-arrow::before {
+    @apply border-b-green-600;
+}
+.tippy-box[data-theme~='success'][data-placement^='left'] > .tippy-arrow::before {
+    @apply border-l-green-600;
+}
+.tippy-box[data-theme~='success'][data-placement^='right'] > .tippy-arrow::before {
+    @apply border-r-green-600;
+}

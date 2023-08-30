@@ -1,0 +1,30 @@
+<div>
+  <div class="flex gap-2">
+    <%= render_slot(@title) %>
+
+    <.spinner
+      id={"#{@id}-loading"}
+      show={true}
+      size="sm"
+      class="opacity-0 transition-opacity duration-1000"
+    />
+  </div>
+
+  <.form for={@form} phx-change="update_input" phx-target={@myself}>
+    <.input
+      type="number"
+      field={@form[@key]}
+      placeholder={@placeholder || "Min"}
+      phx-debounce={@debounce}
+      class="pl-10 pc-text-input"
+      />
+
+    <.input
+      type="number"
+      field={@form[@key]}
+      placeholder={@placeholder || "Max"}
+      phx-debounce={@debounce}
+      class="pl-10 pc-text-input"
+      />
+  </.form>
+</div>

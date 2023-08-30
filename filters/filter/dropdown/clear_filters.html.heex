@@ -1,0 +1,19 @@
+<div>
+  <.button
+    id={@id}
+    with_icon
+    phx-click={start_loading(@id, @myself)}
+    color="danger"
+    class="w-full"
+    data-after-clear={end_loading(@id)}
+    disabled={@disabled?}
+  >
+    <div class="flex justify-center gap-2">
+      <div id={"#{@id}-loading"} class="hidden"><.spinner show={true} class="h-5 w-5" /></div>
+      <div id={"#{@id}-icon"}>
+        <%= FontAwesome.icon("broom", type: "solid", class: "fill-white h-5 w-5") %>
+      </div>
+      Clear Filters
+    </div>
+  </.button>
+</div>

@@ -1,0 +1,59 @@
+<th {@heex_class}>
+  <Tooltip.simple content={tooltip_message(@order)}>
+    <button
+      id={"#{@id}-button"}
+      phx-hook="EventsHook"
+      data-mouseenter-commands={change_sort_icons_on_enter(@id)}
+      data-mouseleave-commands={change_sort_icons_on_leave(@id)}
+      data-on-events="mouseenter, mouseleave"
+      phx-click={start_loading(@id, @myself)}
+      data-after-clear={end_loading(@id)}
+      class="flex items-center w-fit hover:cursor-pointer"
+    >
+      <div class="flex justify-center gap-1 uppercase">
+        <%= render_slot(@inner_block) %>
+
+        <span class="relative flex items-center">
+          <div :if={is_nil(@order)} id={"#{@id}-sort-icon"}>
+            <Heroicons.chevron_down id={"#{@id}-current"} class="h-3 w-3 stroke-current" />
+            <Heroicons.chevron_down
+              id={"#{@id}-next"}
+              solid
+              class="h-3 w-3 stroke-current stroke-2 hidden"
+            />
+          </div>
+
+          <div :if={@order == :asc} id={"#{@id}-sort-icon"}>
+            <Heroicons.chevron_down
+              id={"#{@id}-current"}
+              solid
+              class="h-3 w-3 stroke-current stroke-2"
+            />
+            <Heroicons.chevron_up
+              id={"#{@id}-next"}
+              solid
+              class="h-3 w-3 stroke-current stroke-2 hidden"
+            />
+          </div>
+
+          <div :if={@order == :desc} id={"#{@id}-sort-icon"}>
+            <Heroicons.chevron_up
+              id={"#{@id}-current"}
+              solid
+              class="h-3 w-3 stroke-current stroke-2"
+            />
+            <Heroicons.chevron_down
+              id={"#{@id}-next"}
+              solid
+              class="h-3 w-3 stroke-current stroke-2 hidden"
+            />
+          </div>
+
+          <div id={"#{@id}-loading"} class="hidden">
+            <.spinner show={true} class="h-3 w-3" />
+          </div>
+        </span>
+      </div>
+    </button>
+  </Tooltip.simple>
+</th>

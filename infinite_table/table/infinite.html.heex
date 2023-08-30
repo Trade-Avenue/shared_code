@@ -1,0 +1,37 @@
+<div phx-hook="ScrollableTableHook" {@heex_class} {@rest}>
+  <div class="absolute w-full">
+    <.table class="w-full h-full relative">
+      <thead class="flex w-full">
+        <.tr class="flex w-full">
+          <%= render_slot(@headers, @myself) %>
+        </.tr>
+      </thead>
+
+      <InnerComponents.top_loading id={@id} />
+      <InnerComponents.bottom_loading id={@id} />
+
+      <tbody
+        id={"#{@id}-tbody"}
+        phx-update="stream"
+        phx-hook="InfinityScrollHook"
+        phx-viewport-top-event={@has_previous? && "prev-page"}
+        phx-viewport-bottom-event={@has_next? && "next-page"}
+        phx-target={@myself}
+        data-stream-name={@stream_name}
+        data-general-id={@id}
+        class="flex flex-col items-center justify-start overflow-y-scroll w-full h-[50vh]"
+      >
+        <.tr
+          :for={{id, row} <- fetch_stream!(@streams, @stream_name)}
+          id={id}
+          data-cursor={row.__metadata__.keyset}
+          class="flex w-full"
+        >
+          <%= render_slot(@row, row) %>
+        </.tr>
+      </tbody>
+    </.table>
+  </div>
+
+  <InnerComponents.go_to_top_button id={@id} tbody_id={"##{@id}-tbody"} />
+</div>

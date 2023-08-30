@@ -1,0 +1,15 @@
+<div class="relative w-full">
+  <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+    <Heroicons.magnifying_glass solid class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+  </div>
+
+  <.form for={@form} phx-change="update_input" phx-target={@myself}>
+    <.input
+      type="search"
+      field={@form[@key]}
+      placeholder={@placeholder || "Search"}
+      phx-debounce={@debounce}
+      class="pl-10 pc-text-input"
+    />
+  </.form>
+</div>
