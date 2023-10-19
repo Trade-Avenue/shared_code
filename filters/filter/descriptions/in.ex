@@ -1,9 +1,9 @@
-defmodule FeedbackCupcakeWeb.Components.Filter.Descriptions.In do
+defmodule CoreWeb.Components.Filter.Descriptions.In do
   @moduledoc false
 
-  alias FeedbackCupcakeWeb.Components.Filter.Descriptions.Helper
+  alias CoreWeb.Components.Filter.Descriptions.Helper
 
-  use FeedbackCupcakeWeb, :html
+  use CoreWeb, :html
 
   def value_part(%{filter: filter} = assigns) do
     {last, rest} = filter |> Helper.filter_value() |> List.pop_at(-1)

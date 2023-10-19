@@ -1,7 +1,7 @@
-defmodule FeedbackCupcakeWeb.Components.Form.GenderTextField.Field do
+defmodule CoreWeb.Components.Form.GenderTextField.Field do
   @moduledoc false
 
-  use FeedbackCupcakeWeb, :html
+  use CoreWeb, :html
 
   attr :id, :any, required: true, doc: "The component unique id."
   attr :disabled, :boolean, required: true
@@ -26,6 +26,7 @@ defmodule FeedbackCupcakeWeb.Components.Form.GenderTextField.Field do
       label={@label}
       phx-target={@target}
       phx-change={@change}
+      phx-hook="TextToCursorHook"
     />
     """
   end

@@ -1,40 +1,29 @@
-defmodule FeedbackCupcakeWeb.Components.Filter.Descriptions do
+defmodule CoreWeb.Components.Filter.Descriptions do
   @moduledoc false
 
-  alias FeedbackCupcakeWeb.Components.Filter.Descriptions
-  alias FeedbackCupcakeWeb.Components.{Tooltip, Helpers.Target}
+  alias CoreWeb.Components.Filter.Descriptions
+  alias CoreWeb.Components.{Tooltip, Helpers.Target}
 
   alias AshQueryBuilder.Filter
 
-  use FeedbackCupcakeWeb, :live_component
+  use CoreWeb, :live_component
 
   attr :id, :any, required: true, doc: "The component unique id."
 
   attr :target, Target, default: nil
 
-  attr :query_builder, AshQueryBuilder, required: true
+  attr :builder, AshQueryBuilder, required: true
 
   attr :fields_names, :map, default: %{}
 
   attr :show_clear_all, :boolean, default: true
 
-  def live_render(assigns) do
-    ~H"""
-    <.live_component
-      module={__MODULE__}
-      id={@id}
-      target={@target}
-      query_builder={@query_builder}
-      fields_names={@fields_names}
-      show_clear_all={@show_clear_all}
-    />
-    """
-  end
+  def live_render(assigns), do: ~H"<.live_component module={__MODULE__} {assigns} />"
 
-  def update(%{query_builder: query_builder, show_clear_all: show_clear_all?} = assigns, socket) do
-    assigns = Map.take(assigns, [:id, :target, :fields_names])
+  def update(%{builder: builder, show_clear_all: show_clear_all?} = assigns, socket) do
+    assigns = Map.drop(assigns, [:builder, :show_clear_all])
 
-    filters = Enum.filter(query_builder.filters, &keep?/1)
+    filters = Enum.filter(builder.filters, &keep?/1)
 
     show_clear_all? = show_clear_all? and not Enum.empty?(filters)
 
@@ -128,6 +117,9 @@ defmodule FeedbackCupcakeWeb.Components.Filter.Descriptions do
 
   defp value_part(%{filter: %Filter.GreaterThanOrEqual{}} = assigns),
     do: Descriptions.GreaterThanOrEqual.value_part(assigns)
+
+  defp value_part(%{filter: %Filter.Between{}} = assigns),
+    do: Descriptions.Between.value_part(assigns)
 
   defp value_part(%{filter: %Filter.Similarity{}} = assigns),
     do: Descriptions.Similarity.value_part(assigns)

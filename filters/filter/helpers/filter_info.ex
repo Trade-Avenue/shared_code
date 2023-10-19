@@ -1,4 +1,4 @@
-defmodule FeedbackCupcakeWeb.Components.Filter.Helpers.FilterInfo do
+defmodule CoreWeb.Components.Filter.Helpers.FilterInfo do
   @moduledoc """
   A struct to be used for storing filter information for `AshQueryBuilder`.
   """

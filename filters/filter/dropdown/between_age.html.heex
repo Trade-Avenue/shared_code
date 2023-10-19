@@ -1,0 +1,23 @@
+<div>
+  <.form for={@form} phx-change="update_input" phx-target={@myself}>
+    <div class="flex gap-2">
+      <.input
+        type="number"
+        field={@form[:min]}
+        placeholder={@min_placeholder || "Min"}
+        phx-debounce={@debounce}
+        class="pc-text-input w-20"
+      />
+
+      <.input
+        type="number"
+        field={@form[:max]}
+        placeholder={@max_placeholder || "Max"}
+        phx-debounce={@debounce}
+        class="pc-text-input w-20"
+      />
+    </div>
+
+    <.field_error :for={{_, msg} <- @form.errors}><%= msg %></.field_error>
+  </.form>
+</div>

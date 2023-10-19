@@ -1,9 +1,9 @@
-defmodule FeedbackCupcakeWeb.Components.Filter.Descriptions.Similarity do
+defmodule CoreWeb.Components.Filter.Descriptions.Similarity do
   @moduledoc false
 
-  alias FeedbackCupcakeWeb.Components.Filter.Descriptions.Helper
+  alias CoreWeb.Components.Filter.Descriptions.Helper
 
-  use FeedbackCupcakeWeb, :html
+  use CoreWeb, :html
 
   def value_part(%{filter: filter} = assigns) do
     assigns = assign(assigns, value: Helper.filter_value(filter))

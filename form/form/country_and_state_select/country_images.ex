@@ -1,4 +1,4 @@
-defmodule FeedbackCupcakeWeb.Components.Form.CountryAndStateSelect.CountryImages do
+defmodule CoreWeb.Components.Form.CountryAndStateSelect.CountryImages do
   @moduledoc false
 
   def path(nil), do: nil

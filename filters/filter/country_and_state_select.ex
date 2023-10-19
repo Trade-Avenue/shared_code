@@ -1,16 +1,16 @@
-defmodule FeedbackCupcakeWeb.Components.Filter.CountryAndStateSelect do
+defmodule CoreWeb.Components.Filter.CountryAndStateSelect do
   @moduledoc false
 
-  alias FeedbackCupcakeWeb.Components.Form.CountryAndStateSelect
+  alias CoreWeb.Components.Form.CountryAndStateSelect
 
-  alias FeedbackCupcakeWeb.Components.Filter.Helpers.FilterInfo
-  alias FeedbackCupcakeWeb.Components.Helpers.Target
+  alias CoreWeb.Components.Filter.Helpers.FilterInfo
+  alias CoreWeb.Components.Helpers.Target
 
-  alias FeedbackCupcake.Utils.CountriesAndStates
+  alias Core.Utils.CountriesAndStates
 
   alias AshQueryBuilder.Filter
 
-  use FeedbackCupcakeWeb, :live_component
+  use CoreWeb, :live_component
 
   attr :id, :any, required: true, doc: "The component unique id."
 
@@ -21,17 +21,23 @@ defmodule FeedbackCupcakeWeb.Components.Filter.CountryAndStateSelect do
 
   attr :builder, AshQueryBuilder, required: true, doc: "The query builder."
 
-  def live_render(assigns) do
-    ~H"""
-    <.live_component
-      module={__MODULE__}
-      id={@id}
-      target={@target}
-      country_filter_info={@country_filter_info}
-      state_filter_info={@state_filter_info}
-      builder={@builder}
-    />
-    """
+  def live_render(assigns), do: ~H"<.live_component module={__MODULE__} {assigns} />"
+
+  def update(%{operation: :updated_country_and_state, value: {country, state}}, socket) do
+    %{
+      country_filter_info: country_filter_info,
+      state_filter_info: state_filter_info,
+      target: target
+    } = socket.assigns
+
+    filters = [
+      create_filter(country_filter_info, country, CountriesAndStates.country_name(country)),
+      create_filter(state_filter_info, state, CountriesAndStates.state_name(country, state))
+    ]
+
+    Target.send_message(%{operation: :update_filters, filters: filters}, target)
+
+    {:ok, socket}
   end
 
   def update(%{operation: :updated_state, value: value}, socket) do
@@ -71,7 +77,7 @@ defmodule FeedbackCupcakeWeb.Components.Filter.CountryAndStateSelect do
     country = find_value(builder, country_key)
     state = find_value(builder, state_key)
 
-    assigns = Map.take(assigns, [:id, :target, :country_filter_info, :state_filter_info])
+    assigns = Map.drop(assigns, [:builder])
 
     socket =
       socket

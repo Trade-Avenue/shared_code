@@ -1,44 +1,46 @@
-<div class="mb-3 flex flex-wrap gap-4">
-  <.badge
-    :for={filter <- @filters}
-    variant="light"
-    size="md"
-    class="bg-gray-50 border-gray-200 text-gray-800 font-normal rounded-full space-x-2 truncate"
-  >
-    <p class="truncate">
-      <.description filter={filter} names_map={@fields_names} />
-    </p>
+<div>
+  <div :if={not Enum.empty?(@filters)} class="mb-3 flex flex-wrap gap-4">
+    <.badge
+      :for={filter <- @filters}
+      variant="light"
+      size="md"
+      class="bg-gray-50 border-gray-200 text-gray-800 font-normal rounded-full space-x-2 truncate"
+    >
+      <p class="truncate">
+        <.description filter={filter} names_map={@fields_names} />
+      </p>
 
-    <Tooltip.simple content="Remove filter">
-      <div id={"#{filter.id}-loading"} class="w-6 h-6 items-center justify-center hidden">
-        <.spinner show={true} class="w-4 h-4" />
+      <Tooltip.simple content="Remove filter">
+        <div id={"#{filter.id}-loading"} class="w-6 h-6 items-center justify-center hidden">
+          <.spinner show={true} class="w-4 h-4" />
+        </div>
+        <.icon_button
+          class="w-6 h-6 bg-gray-100 flex items-center justify-center"
+          type="button"
+          phx-click={remove_filter(@myself, filter.id)}
+          phx-value-id={filter.id}
+        >
+          <Heroicons.x_circle class="w-5 h-5" />
+        </.icon_button>
+      </Tooltip.simple>
+    </.badge>
+    <.badge
+      :if={@show_clear_all?}
+      variant="light"
+      size="md"
+      id={"#{@id}-clear-all"}
+      class="bg-gray-50 hover:bg-gray-100 focus:bg-gray-50 border-gray-200 text-gray-800 font-normal rounded-full gap-2 cursor-pointer"
+      phx-click={clear_filters(@myself, @id)}
+    >
+      <div class="flex items-center justify-center gap-2 my-1">
+        <div id={"#{@id}-clear-all-loading"} class="hidden">
+          <.spinner show={true} class="h-4 w-4" />
+        </div>
+        <div id={"#{@id}-clear-all-icon"}>
+          <%= FontAwesome.icon("broom", type: "solid", class: "fill-black h-4 w-4") %>
+        </div>
+        Clear Filters
       </div>
-      <.icon_button
-        class="w-6 h-6 bg-gray-100 flex items-center justify-center"
-        type="button"
-        phx-click={remove_filter(@myself, filter.id)}
-        phx-value-id={filter.id}
-      >
-        <Heroicons.x_circle class="w-5 h-5" />
-      </.icon_button>
-    </Tooltip.simple>
-  </.badge>
-  <.badge
-    :if={@show_clear_all?}
-    variant="light"
-    size="md"
-    id={"#{@id}-clear-all"}
-    class="bg-gray-50 hover:bg-gray-100 focus:bg-gray-50 border-gray-200 text-gray-800 font-normal rounded-full gap-2 cursor-pointer"
-    phx-click={clear_filters(@myself, @id)}
-  >
-    <div class="flex items-center justify-center gap-2 my-1">
-      <div id={"#{@id}-clear-all-loading"} class="hidden">
-        <.spinner show={true} class="h-4 w-4" />
-      </div>
-      <div id={"#{@id}-clear-all-icon"}>
-        <%= FontAwesome.icon("broom", type: "solid", class: "fill-black h-4 w-4") %>
-      </div>
-      Clear Filters
-    </div>
-  </.badge>
+    </.badge>
+  </div>
 </div>

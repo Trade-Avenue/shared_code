@@ -1,50 +1,26 @@
-defmodule FeedbackCupcakeWeb.Components.Form.CountryAndStateSelect.DataLoad do
+defmodule CoreWeb.Components.Form.CountryAndStateSelect.DataLoad do
   @moduledoc false
 
-  alias FeedbackCupcake.Utils.CountriesAndStates
+  alias Core.Utils.CountriesAndStates
 
-  alias Phoenix.LiveView
+  def initial_load(country, state) do
+    countries = CountriesAndStates.iso_3_countries() |> add_empty_option("Select a country")
 
-  def async_initial_load(id, component_module, country, state, pid \\ self()) do
-    Task.async(fn ->
-      countries = CountriesAndStates.iso_3_countries() |> add_empty_option("Select a country")
+    country = countries |> find_country_option(country) |> elem(1)
 
-      country = countries |> find_country_option(country) |> elem(1)
+    states = country |> CountriesAndStates.states() |> add_empty_option("Select a state")
 
-      states = country |> CountriesAndStates.states() |> add_empty_option("Select a state")
+    state = states |> find_state_option(state) |> elem(1)
 
-      state = states |> find_state_option(state) |> elem(1)
-
-      LiveView.send_update(pid, component_module,
-        id: id,
-        task: self(),
-        operation: :initial_load,
-        countries: countries,
-        country: country,
-        states: states,
-        state: state
-      )
-
-      :ok
-    end)
+    %{countries: countries, states: states, country: country, state: state}
   end
 
-  def async_load_states(id, component_module, country_iso_3, pid \\ self()) do
-    Task.async(fn ->
-      states = country_iso_3 |> CountriesAndStates.states() |> add_empty_option("Select a state")
+  def load_states(country_iso_3) do
+    states = country_iso_3 |> CountriesAndStates.states() |> add_empty_option("Select a state")
 
-      state = states |> find_state_option(nil) |> elem(1)
+    state = states |> find_state_option(nil) |> elem(1)
 
-      LiveView.send_update(pid, component_module,
-        id: id,
-        task: self(),
-        operation: :states_load,
-        states: states,
-        state: state
-      )
-
-      :ok
-    end)
+    %{states: states, state: state}
   end
 
   defp add_empty_option(options, empty_option_label), do: [{empty_option_label, nil} | options]

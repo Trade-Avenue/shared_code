@@ -1,9 +1,9 @@
-defmodule FeedbackCupcakeWeb.Components.Form.Select do
+defmodule CoreWeb.Components.Form.Select do
   @moduledoc false
 
-  alias FeedbackCupcakeWeb.Components.Helpers.Target
+  alias CoreWeb.Components.Helpers.Target
 
-  use FeedbackCupcakeWeb, :live_component
+  use CoreWeb, :live_component
 
   attr :id, :any, required: true, doc: "The component unique id."
 
@@ -25,42 +25,12 @@ defmodule FeedbackCupcakeWeb.Components.Form.Select do
   slot :option_element, required: true
   slot :empty_list_element
 
-  def live_render(assigns) do
-    ~H"""
-    <.live_component
-      module={__MODULE__}
-      id={@id}
-      target={@target}
-      searchable?={@searchable?}
-      search_placeholder={@search_placeholder}
-      search_element_query={@search_element_query}
-      options={@options}
-      default_option={@default_option}
-      trigger_element={@trigger_element}
-      option_element={@option_element}
-      empty_list_element={@empty_list_element}
-      rest={@rest}
-    />
-    """
-  end
+  def live_render(assigns), do: ~H"<.live_component module={__MODULE__} {assigns} />"
 
   def update(assigns, socket) do
     %{id: id, default_option: default_option} = assigns
 
-    assigns =
-      Map.take(assigns, [
-        :id,
-        :name,
-        :target,
-        :searchable?,
-        :search_placeholder,
-        :search_element_query,
-        :options,
-        :trigger_element,
-        :option_element,
-        :empty_list_element,
-        :rest
-      ])
+    assigns = Map.drop(assigns, [:default_option])
 
     socket =
       socket

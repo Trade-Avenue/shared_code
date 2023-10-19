@@ -1,11 +1,11 @@
-defmodule FeedbackCupcakeWeb.Components.Form.CountryAndStateSelect.InnerComponents do
+defmodule CoreWeb.Components.Form.CountryAndStateSelect.InnerComponents do
   @moduledoc false
 
-  alias FeedbackCupcakeWeb.Components.Form.CountryAndStateSelect.CountryImages
+  alias CoreWeb.Components.Form.CountryAndStateSelect.CountryImages
 
-  alias FeedbackCupcakeWeb.Components.{Form.Select, Helpers.Target}
+  alias CoreWeb.Components.{Form.Select, Helpers.Target}
 
-  use FeedbackCupcakeWeb, :html
+  use CoreWeb, :html
 
   attr :id, :any, required: true, doc: "The parent component unique id."
 

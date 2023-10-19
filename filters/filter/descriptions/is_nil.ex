@@ -1,7 +1,7 @@
-defmodule FeedbackCupcakeWeb.Components.Filter.Descriptions.IsNil do
+defmodule CoreWeb.Components.Filter.Descriptions.IsNil do
   @moduledoc false
 
-  use FeedbackCupcakeWeb, :html
+  use CoreWeb, :html
 
   def value_part(assigns) do
     ~H"""

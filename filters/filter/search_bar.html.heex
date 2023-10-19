@@ -3,13 +3,13 @@
     <Heroicons.magnifying_glass solid class="w-5 h-5 text-gray-500 dark:text-gray-400" />
   </div>
 
-  <.form for={@form} phx-change="update_input" phx-target={@myself}>
+  <.form for={@form} phx-change="update_input" {@heex_form_class} phx-target={@myself}>
     <.input
       type="search"
       field={@form[@key]}
       placeholder={@placeholder || "Search"}
       phx-debounce={@debounce}
-      class="pl-10 pc-text-input"
+      {@heex_class}
     />
   </.form>
 </div>

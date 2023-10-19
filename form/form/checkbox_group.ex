@@ -1,7 +1,7 @@
-defmodule FeedbackCupcakeWeb.Components.Form.CheckboxGroup do
+defmodule CoreWeb.Components.Form.CheckboxGroup do
   @moduledoc false
 
-  use FeedbackCupcakeWeb, :html
+  use CoreWeb, :html
 
   attr :field, Phoenix.HTML.FormField,
     doc: "a form field struct retrieved from the form, for example: @form[:email]"

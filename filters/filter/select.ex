@@ -1,14 +1,14 @@
-defmodule FeedbackCupcakeWeb.Components.Filter.Select do
+defmodule CoreWeb.Components.Filter.Select do
   @moduledoc false
 
-  alias FeedbackCupcakeWeb.Components.Form.Select
+  alias CoreWeb.Components.Form.Select
 
-  alias FeedbackCupcakeWeb.Components.Filter.Helpers.FilterInfo
-  alias FeedbackCupcakeWeb.Components.Helpers.Target
+  alias CoreWeb.Components.Filter.Helpers.FilterInfo
+  alias CoreWeb.Components.Helpers.Target
 
   alias AshQueryBuilder.Filter
 
-  use FeedbackCupcakeWeb, :live_component
+  use CoreWeb, :live_component
 
   attr :id, :any, required: true, doc: "The component unique id."
 
@@ -23,20 +23,7 @@ defmodule FeedbackCupcakeWeb.Components.Filter.Select do
   attr :searchable?, :boolean, default: true
   attr :search_placeholder, :string, default: "Search"
 
-  def live_render(assigns) do
-    ~H"""
-    <.live_component
-      module={__MODULE__}
-      id={@id}
-      target={@target}
-      filter_info={@filter_info}
-      builder={@builder}
-      options={@options}
-      searchable?={@searchable?}
-      search_placeholder={@search_placeholder}
-    />
-    """
-  end
+  def live_render(assigns), do: ~H"<.live_component module={__MODULE__} {assigns} />"
 
   def update(%{operation: :updated_value, value: value}, socket) do
     %{filter_info: filter_info, target: target} = socket.assigns
@@ -51,16 +38,7 @@ defmodule FeedbackCupcakeWeb.Components.Filter.Select do
   def update(assigns, socket) do
     %{id: id, filter_info: %{id: key}, builder: builder} = assigns
 
-    assigns =
-      Map.take(assigns, [
-        :id,
-        :target,
-        :filter_info,
-        :options,
-        :default_option,
-        :searchable?,
-        :search_placeholder
-      ])
+    assigns = Map.drop(assigns, [:builder])
 
     value = find_value(builder, key)
 

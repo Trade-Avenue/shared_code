@@ -1,7 +1,7 @@
-defmodule FeedbackCupcakeWeb.Components.Form.GenderTextField.Switch do
+defmodule CoreWeb.Components.Form.GenderTextField.Switch do
   @moduledoc false
 
-  use FeedbackCupcakeWeb, :html
+  use CoreWeb, :html
 
   attr :parent_id, :any, required: true, doc: "The component unique id."
 

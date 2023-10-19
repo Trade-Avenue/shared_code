@@ -1,22 +1,18 @@
-defmodule FeedbackCupcakeWeb.Components.Form.GenderTextField do
+defmodule CoreWeb.Components.Form.GenderTextField do
   @moduledoc false
 
-  alias FeedbackCupcakeWeb.Components.Form.GenderTextField.{
+  alias CoreWeb.Components.Form.GenderTextField.{
     Field,
     Switch,
     Badge,
     GenButton
   }
 
-  use FeedbackCupcakeWeb, :live_component
+  use CoreWeb, :live_component
 
   attr :id, :any, required: true, doc: "The component unique id."
 
-  def live_render(assigns) do
-    ~H"""
-    <.live_component module={__MODULE__} id={@id} />
-    """
-  end
+  def live_render(assigns), do: ~H"<.live_component module={__MODULE__} {assigns} />"
 
   def update(assigns, socket) do
     socket =
@@ -25,14 +21,14 @@ defmodule FeedbackCupcakeWeb.Components.Form.GenderTextField do
       |> assign_new(:auto_male?, fn -> false end)
       |> assign_new(:auto_female?, fn -> true end)
       |> assign_new(:form, fn -> to_form(%{}) end)
-      |> assign(:id, assigns.id)
+      |> assign(assigns)
 
     {:ok, socket}
   end
 
   def render(assigns) do
     ~H"""
-    <div class="text-white">
+    <div class="dark:text-white text-black">
       <div class="flex flex-col md:flex md:flex-row" id={"text-field-container-#{@id}"}>
         <div class="md:w-1/2">
           <Field.render
@@ -83,6 +79,10 @@ defmodule FeedbackCupcakeWeb.Components.Form.GenderTextField do
 
     socket = assign(socket, auto_gen?: not auto_gen?) |> handle_generation(params)
 
+    {:noreply, socket}
+  end
+
+  def handle_event("submit_to_cursor", params, socket) do
     {:noreply, socket}
   end
 

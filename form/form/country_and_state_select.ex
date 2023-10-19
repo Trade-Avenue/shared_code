@@ -1,11 +1,11 @@
-defmodule FeedbackCupcakeWeb.Components.Form.CountryAndStateSelect do
+defmodule CoreWeb.Components.Form.CountryAndStateSelect do
   @moduledoc false
 
-  alias FeedbackCupcakeWeb.Components.Form.CountryAndStateSelect.{DataLoad, InnerComponents}
+  alias CoreWeb.Components.Form.CountryAndStateSelect.{DataLoad, InnerComponents}
 
-  alias FeedbackCupcakeWeb.Components.Helpers.Target
+  alias CoreWeb.Components.Helpers.Target
 
-  use FeedbackCupcakeWeb, :live_component
+  use CoreWeb, :live_component
 
   attr :id, :any, required: true, doc: "The component unique id."
 
@@ -14,37 +14,7 @@ defmodule FeedbackCupcakeWeb.Components.Form.CountryAndStateSelect do
   attr :country, :string, default: nil, doc: "The selected country."
   attr :state, :string, default: nil, doc: "The selected country state."
 
-  def live_render(assigns) do
-    ~H"""
-    <.live_component module={__MODULE__} id={@id} target={@target} country={@country} state={@state} />
-    """
-  end
-
-  def update(%{operation: :initial_load} = assigns, socket) do
-    # Triggered when the initial load data is fetched
-
-    %{current_task: current_task} = socket.assigns
-
-    if current_task == assigns.task do
-      socket = socket |> handle_updated_country(assigns) |> handle_updated_state(assigns)
-
-      {:ok, socket}
-    else
-      {:ok, socket}
-    end
-  end
-
-  def update(%{operation: :states_load} = assigns, socket) do
-    # Triggered when the new states data is fetched
-
-    %{current_task: current_task} = socket.assigns
-
-    if current_task == assigns.task do
-      {:ok, handle_updated_state(socket, assigns)}
-    else
-      {:ok, socket}
-    end
-  end
+  def live_render(assigns), do: ~H"<.live_component module={__MODULE__} {assigns} />"
 
   def update(%{operation: :updated_value} = assigns, socket) do
     # Triggered when the select component checked value changes
@@ -55,9 +25,9 @@ defmodule FeedbackCupcakeWeb.Components.Form.CountryAndStateSelect do
     if from_id == "#{id}-country" do
       Target.send_message(%{operation: :updated_country, value: value}, target)
 
-      task = DataLoad.async_load_states(id, __MODULE__, value)
+      socket = start_async(socket, :states_load, fn -> DataLoad.load_states(value) end)
 
-      {:ok, assign(socket, country: value, state: nil, states: [], current_task: task.pid)}
+      {:ok, assign(socket, country: value, state: nil, states: [])}
     else
       Target.send_message(%{operation: :updated_state, value: value}, target)
 
@@ -95,16 +65,14 @@ defmodule FeedbackCupcakeWeb.Components.Form.CountryAndStateSelect do
 
     socket =
       if connected?(socket) do
-        %{id: id, country: country, state: state} = assigns
+        %{country: country, state: state} = assigns
 
-        task = DataLoad.async_initial_load(id, __MODULE__, country, state)
-
-        assign(socket, current_task: task.pid)
+        start_async(socket, :initial_load, fn -> DataLoad.initial_load(country, state) end)
       else
-        assign(socket, current_task: nil)
+        socket
       end
 
-    assigns = Map.take(assigns, [:id, :target])
+    assigns = Map.drop(assigns, [:country, :state])
 
     socket =
       socket
@@ -114,6 +82,30 @@ defmodule FeedbackCupcakeWeb.Components.Form.CountryAndStateSelect do
       |> push_data_load_event(:country, :started)
 
     {:ok, socket}
+  end
+
+  def handle_async(:initial_load, {:ok, %{country: country, state: state} = data}, socket) do
+    %{target: target} = socket.assigns
+
+    Target.send_message(%{operation: :updated_country_and_state, value: {country, state}}, target)
+
+    socket =
+      socket
+      |> assign(data)
+      |> push_data_load_event(:country, :finished)
+      |> push_data_load_event(:state, :finished)
+
+    {:noreply, socket}
+  end
+
+  def handle_async(:states_load, {:ok, %{state: state} = data}, socket) do
+    %{target: target} = socket.assigns
+
+    Target.send_message(%{operation: :updated_state, value: state}, target)
+
+    socket = socket |> assign(data) |> push_data_load_event(:state, :finished)
+
+    {:noreply, socket}
   end
 
   def render(assigns) do
@@ -134,30 +126,6 @@ defmodule FeedbackCupcakeWeb.Components.Form.CountryAndStateSelect do
       />
     </div>
     """
-  end
-
-  defp handle_updated_country(socket, %{country: country} = assigns) do
-    %{target: target} = socket.assigns
-
-    Target.send_message(%{operation: :updated_country, value: country}, target)
-
-    assigns = Map.take(assigns, [:countries, :country])
-
-    socket
-    |> assign(assigns)
-    |> push_data_load_event(:country, :finished)
-  end
-
-  defp handle_updated_state(socket, %{state: state} = assigns) do
-    %{target: target} = socket.assigns
-
-    Target.send_message(%{operation: :updated_state, value: state}, target)
-
-    assigns = Map.take(assigns, [:states, :state])
-
-    socket
-    |> assign(assigns)
-    |> push_data_load_event(:state, :finished)
   end
 
   defp push_data_load_event(%{assigns: %{id: id}} = socket, :state, :started),

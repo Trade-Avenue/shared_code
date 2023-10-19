@@ -1,7 +1,7 @@
-defmodule FeedbackCupcakeWeb.Components.Form.Select.Loading do
+defmodule CoreWeb.Components.Form.Select.Loading do
   @moduledoc false
 
-  use FeedbackCupcakeWeb, :html
+  use CoreWeb, :html
 
   attr :id, :any, required: true
 

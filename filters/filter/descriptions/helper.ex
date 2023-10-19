@@ -1,9 +1,9 @@
-defmodule FeedbackCupcakeWeb.Components.Filter.Descriptions.Helper do
+defmodule CoreWeb.Components.Filter.Descriptions.Helper do
   @moduledoc false
 
-  alias FeedbackCupcakeWeb.Components.LocalTime
+  alias CoreWeb.Components.LocalTime
 
-  use FeedbackCupcakeWeb, :html
+  use CoreWeb, :html
 
   def maybe_get_name_from_map(key, path, names) when is_map_key(names, {key, path}),
     do: Map.fetch!(names, {key, path})

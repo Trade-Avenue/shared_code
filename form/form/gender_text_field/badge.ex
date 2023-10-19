@@ -1,7 +1,7 @@
-defmodule FeedbackCupcakeWeb.Components.Form.GenderTextField.Badge do
+defmodule CoreWeb.Components.Form.GenderTextField.Badge do
   @moduledoc false
 
-  use FeedbackCupcakeWeb, :html
+  use CoreWeb, :html
 
   attr :auto_gen?, :boolean, required: true
 

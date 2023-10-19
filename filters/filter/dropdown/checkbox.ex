@@ -1,13 +1,13 @@
-defmodule FeedbackCupcakeWeb.Components.Filter.Dropdown.Checkbox do
+defmodule CoreWeb.Components.Filter.Dropdown.Checkbox do
   @moduledoc false
 
-  alias FeedbackCupcakeWeb.Components.Filter.Helpers.FilterInfo
-  alias FeedbackCupcakeWeb.Components.Form.CheckboxGroup
-  alias FeedbackCupcakeWeb.Components.Helpers.Target
+  alias CoreWeb.Components.Filter.Helpers.FilterInfo
+  alias CoreWeb.Components.Form.CheckboxGroup
+  alias CoreWeb.Components.Helpers.Target
 
   alias AshQueryBuilder.Filter
 
-  use FeedbackCupcakeWeb, :live_component
+  use CoreWeb, :live_component
 
   attr :id, :any, required: true, doc: "The component unique id."
 
@@ -17,30 +17,18 @@ defmodule FeedbackCupcakeWeb.Components.Filter.Dropdown.Checkbox do
 
   attr :filter_info, FilterInfo, required: true, doc: "The info to use for creating filters."
 
-  attr :query_builder, AshQueryBuilder, required: true, doc: "The query builder."
+  attr :builder, AshQueryBuilder, required: true, doc: "The query builder."
 
   slot :title, doc: "The title slot."
 
-  def live_render(assigns) do
-    ~H"""
-    <.live_component
-      module={__MODULE__}
-      id={@id}
-      target={@target}
-      options={@options}
-      title={@title}
-      filter_info={@filter_info}
-      query_builder={@query_builder}
-    />
-    """
-  end
+  def live_render(assigns), do: ~H"<.live_component module={__MODULE__} {assigns} />"
 
   def update(assigns, socket) do
-    %{filter_info: %{id: key}, options: options, query_builder: builder} = assigns
+    %{filter_info: %{id: key}, options: options, builder: builder} = assigns
 
     values = find_or_create_values(builder, key)
 
-    assigns = Map.take(assigns, [:id, :filter_info, :target, :options, :title])
+    assigns = Map.drop(assigns, [:builder])
 
     all_selected? = all_selected?(values, options)
 

@@ -1,24 +1,20 @@
-defmodule FeedbackCupcakeWeb.Components.Filter.Dropdown.ClearFilters do
+defmodule CoreWeb.Components.Filter.Dropdown.ClearFilters do
   @moduledoc false
 
-  alias FeedbackCupcakeWeb.Components.Helpers.Target
+  alias CoreWeb.Components.Helpers.Target
 
-  use FeedbackCupcakeWeb, :live_component
+  use CoreWeb, :live_component
 
   attr :id, :any, required: true, doc: "The component unique id."
 
   attr :target, Target, default: nil
 
-  attr :query_builder, AshQueryBuilder, required: true
+  attr :builder, AshQueryBuilder, required: true
 
-  def live_render(assigns) do
-    ~H"""
-    <.live_component module={__MODULE__} id={@id} target={@target} query_builder={@query_builder} />
-    """
-  end
+  def live_render(assigns), do: ~H"<.live_component module={__MODULE__} {assigns} />"
 
-  def update(%{id: id, target: target, query_builder: builder}, socket) do
-    disabled? = Enum.empty?(builder.filters)
+  def update(%{id: id, target: target, builder: builder}, socket) do
+    disabled? = empty?(builder.filters)
 
     {:ok, assign(socket, id: id, target: target, disabled?: disabled?)}
   end
@@ -43,4 +39,11 @@ defmodule FeedbackCupcakeWeb.Components.Filter.Dropdown.ClearFilters do
     |> JS.hide(to: "##{id}-loading", time: 0)
     |> JS.show(to: "##{id}-icon", time: 0)
   end
+
+  defp empty?(filters), do: filters |> Enum.filter(&keep?/1) |> Enum.empty?()
+
+  defp keep?(%AshQueryBuilder.FilterScope{filters: filters}),
+    do: Enum.any?(filters, & &1.enabled?)
+
+  defp keep?(%{enabled?: enabled?}), do: enabled?
 end

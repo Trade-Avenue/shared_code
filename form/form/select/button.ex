@@ -1,9 +1,9 @@
-defmodule FeedbackCupcakeWeb.Components.Form.Select.Button do
+defmodule CoreWeb.Components.Form.Select.Button do
   @moduledoc false
 
   alias Phoenix.HTML.FormField
 
-  use FeedbackCupcakeWeb, :html
+  use CoreWeb, :html
 
   attr :parent_id, :any, required: true
 

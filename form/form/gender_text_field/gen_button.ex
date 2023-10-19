@@ -1,7 +1,7 @@
-defmodule FeedbackCupcakeWeb.Components.Form.GenderTextField.GenButton do
+defmodule CoreWeb.Components.Form.GenderTextField.GenButton do
   @moduledoc false
 
-  use FeedbackCupcakeWeb, :html
+  use CoreWeb, :html
 
   attr :auto_gen?, :boolean, required: true
   attr :target, Phoenix.LiveComponent.CID, required: true

@@ -1,9 +1,9 @@
-defmodule FeedbackCupcakeWeb.Components.Form.Select.Option do
+defmodule CoreWeb.Components.Form.Select.Option do
   @moduledoc false
 
   alias Phoenix.{HTML.FormField, LiveComponent.CID}
 
-  use FeedbackCupcakeWeb, :html
+  use CoreWeb, :html
 
   attr :parent_id, :any, required: true
 
